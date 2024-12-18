@@ -10,14 +10,14 @@ import java.util.Scanner;
 
 public class TestAppForumPoblenou {
     public static void main(String[] args) {
-        Student student = new Student("99999999X", "Steven", "nystepro@gmail.com",999999999,"12345678",new Degree("DAM", "Across Platform Apps"));
+//        Student student = new Student("99999999X", "Steven", "nystepro@gmail.com",999999999,"12345678",new Degree("DAM", "Across Platform Apps"));
 //        System.out.println(student);
 //        Teacher teacher = new Teacher("99999999X", "Levi", "levi@gmail.com", 999999999, "12345678",new Degree("ASIX", "Security"));
 //        System.out.println(teacher);
 //
 //
         Auth auth = new Auth();
-        auth.register(student);
+//        auth.register(student);
 //        auth.register(teacher);
 //
 //        System.out.println(auth.login("nystepro@gmail.com", "12345678"));
@@ -97,6 +97,20 @@ public class TestAppForumPoblenou {
                     break;
                 case 3:
                     System.out.println("=============Login Anonymous============");
+                    User loggedInUserAnonymous = auth.login();
+                    if (loggedInUserAnonymous == null){
+                        break;
+                    } else {
+                        System.out.printf("""
+                                ======================Welcome to Forum %s===============
+                                =============================%s=========================
+                                1. Watch General Posts
+                                2. Watch Posts of Questions
+                                3. Watch Posts of Helps
+                                4. Watch Posts of Events
+                                5. Leave
+                               """,loggedInUserAnonymous.getName(),loggedInUserAnonymous.getRole());
+                    }
                     break;
                 case 4:
                     System.out.println("==================Leave=================");

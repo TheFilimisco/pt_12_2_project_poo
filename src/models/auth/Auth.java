@@ -46,6 +46,12 @@ public class Auth {
         return null;
     }
 
+    public User login(){
+        User userAnonymous = new User();
+        users.add(userAnonymous);
+        return userAnonymous;
+    }
+
 
     @Override
     public String toString() {
