@@ -1,8 +1,6 @@
 package models.user;
 
-import models.Degree.Degree;
-
-import java.util.ArrayList;
+import models.degree.Degree;
 
 public class Student extends User{
     private Degree assignedDegree;

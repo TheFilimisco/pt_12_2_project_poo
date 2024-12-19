@@ -1,6 +1,6 @@
 package models.user;
 
-import models.Degree.Degree;
+import models.degree.Degree;
 
 import java.util.ArrayList;
 

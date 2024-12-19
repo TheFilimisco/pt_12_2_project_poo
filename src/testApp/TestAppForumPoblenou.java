@@ -1,6 +1,6 @@
 package testApp;
 
-import models.Degree.Degree;
+import models.degree.Degree;
 import models.auth.Auth;
 import models.user.Student;
 import models.user.Teacher;
@@ -65,10 +65,10 @@ public class TestAppForumPoblenou {
                     int inputYourOption = input.nextInt();
                     if (inputYourOption==1){
                         input.nextLine();
-                        System.out.println( auth.register(new Student(inputDni,inputName, inputEmail, inputNumberPhone, inputPassword, new Degree(inputNameDegree,"XD"))));
+                        auth.register(new Student(inputDni,inputName, inputEmail, inputNumberPhone, inputPassword, new Degree(inputNameDegree,"XD")));
                     } else if (inputYourOption==2) {
                         input.nextLine();
-                        System.out.println( auth.register(new Teacher(inputDni,inputName, inputEmail, inputNumberPhone, inputPassword, new Degree(inputNameDegree,"XD"))));
+                        auth.register(new Teacher(inputDni,inputName, inputEmail, inputNumberPhone, inputPassword, new Degree(inputNameDegree,"XD")));
                     } else {
                         break;
                     }
@@ -98,10 +98,7 @@ public class TestAppForumPoblenou {
                 case 3:
                     System.out.println("=============Login Anonymous============");
                     User loggedInUserAnonymous = auth.login();
-                    if (loggedInUserAnonymous == null){
-                        break;
-                    } else {
-                        System.out.printf("""
+                    System.out.printf("""
                                 ======================Welcome to Forum %s===============
                                 =============================%s=========================
                                 1. Watch General Posts
@@ -110,7 +107,6 @@ public class TestAppForumPoblenou {
                                 4. Watch Posts of Events
                                 5. Leave
                                """,loggedInUserAnonymous.getName(),loggedInUserAnonymous.getRole());
-                    }
                     break;
                 case 4:
                     System.out.println("==================Leave=================");

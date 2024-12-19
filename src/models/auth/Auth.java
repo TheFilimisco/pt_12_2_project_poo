@@ -22,16 +22,24 @@ public class Auth {
         this.users = users;
     }
 
-    public boolean register(User user){
+    public void register(User user){
         for (User us: users) {
             if (us.getDni().equals(user.getDni())){
                 System.out.println("User is registered!");
-                return false;
+            }
+
+            if (us instanceof Student) {
+                System.out.println("Student");
+            }
+
+            if (us instanceof Teacher) {
+                System.out.println("Teacher");
             }
         }
+
+
         users.add(user);
         System.out.println("Register successful!...");
-        return true;
     }
 
 

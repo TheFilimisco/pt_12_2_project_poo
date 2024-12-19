@@ -1,4 +1,4 @@
-package models.Degree;
+package models.degree;
 
 public class Subject {
     private int idSubject;
