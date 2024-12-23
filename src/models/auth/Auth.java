@@ -27,17 +27,7 @@ public class Auth {
             if (us.getDni().equals(user.getDni())){
                 System.out.println("User is registered!");
             }
-
-            if (us instanceof Student) {
-                System.out.println("Student");
-            }
-
-            if (us instanceof Teacher) {
-                System.out.println("Teacher");
-            }
         }
-
-
         users.add(user);
         System.out.println("Register successful!...");
     }
