@@ -1,4 +1,4 @@
-package models.Degree;
+package models.degree;
 
 import java.util.ArrayList;
 
