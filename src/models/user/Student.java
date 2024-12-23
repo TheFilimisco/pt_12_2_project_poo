@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Student extends User{
     private Degree assignedDegree;
 
+
     public Student(String dni, String name, String email, int phoneNumber, String password, Degree assignedDegree) {
         super(dni, name, email, phoneNumber, password);
         this.assignedDegree = assignedDegree;
