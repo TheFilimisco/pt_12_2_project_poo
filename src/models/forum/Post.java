@@ -1,5 +1,6 @@
 package models.forum;
 
+import models.degree.Degree;
 import models.user.User;
 
 import java.time.LocalDate;
@@ -8,18 +9,42 @@ public class Post {
     private int idPost;
     private String title;
     private User author;
-    private String typeOfPost;
+    private TypeOfPost typeOfPost;
     private String description;
     private LocalDate date;
+    private Degree degree;
     private static int counterPost = 0;
 
-    public Post(String title, User author, String typeOfPost, String description, LocalDate date) {
+    public Post(String title, User author, String typeOfPost, String description, LocalDate date, Degree degree) {
         this.idPost = counterPost++;
         this.title = title;
         this.author = author;
-        this.typeOfPost = typeOfPost;
+        switch (typeOfPost){
+            case "Doubts":
+                this.typeOfPost = TypeOfPost.Doubts;
+                break;
+            case "Questions":
+                this.typeOfPost = TypeOfPost.Questions;
+                break;
+            case "Help":
+                this.typeOfPost = TypeOfPost.Help;
+                break;
+            case "Events":
+                this.typeOfPost = TypeOfPost.Events;
+                break;
+            default:
+                throw new IllegalArgumentException("Do write correct Type of Post");
+        }
         this.description = description;
         this.date = date;
+        this.degree = degree;
+    }
+
+    public enum TypeOfPost{
+        Doubts,
+        Questions,
+        Help,
+        Events
     }
 
 
@@ -47,11 +72,11 @@ public class Post {
         this.author = author;
     }
 
-    public String getTypeOfPost() {
+    public TypeOfPost getTypeOfPost() {
         return typeOfPost;
     }
 
-    public void setTypeOfPost(String typeOfPost) {
+    public void setTypeOfPost(TypeOfPost typeOfPost) {
         this.typeOfPost = typeOfPost;
     }
 
@@ -79,15 +104,31 @@ public class Post {
         Post.counterPost = counterPost;
     }
 
+    public Degree getDegree() {
+        return degree;
+    }
+
+    public void setDegree(Degree degree) {
+        this.degree = degree;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
-                "idPost=" + idPost +
-                ", title='" + title + '\'' +
-                ", author=" + author +
-                ", typeOfPost='" + typeOfPost + '\'' +
-                ", description='" + description + '\'' +
-                ", date=" + date +
+                "\nidPost=" + idPost +
+                "\ntitle='" + title + '\'' +
+                "\nauthor=" + author +
+                "\ntypeOfPost=" + typeOfPost +
+                "\ndescription='" + description + '\'' +
+                "\ndate=" + date +
+                "\ndegree=" + degree +
                 '}';
     }
+
+    //    public static void main(String[] args) {
+//        Post post = new Post("Alguien me puede ayudar", new User(), "Doubts", "Que necesito ayuda en matematicas", LocalDate.now());
+//        System.out.println(post);
+//    }
+
+
 }
