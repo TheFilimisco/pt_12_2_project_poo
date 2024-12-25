@@ -17,7 +17,7 @@ public class Degree {
         DAM,ASIX,SMIX
     }
 
-    public Degree(String degreeName, String description) {
+    public Degree(String degreeName) {
         this.idDegree = counterDegree++;
         switch (degreeName){
             case "DAM":
@@ -26,6 +26,7 @@ public class Degree {
                 subjects.add(new Subject("Sistemas Informaticos", "ASDADASD"));
                 subjects.add(new Subject("Bases de Datos", "ASDADASD"));
                 subjects.add(new Subject("Programacion", "ASDADASD"));
+                description = "Desarrollo de aplicaciones multiplataformas";
                 break;
             case "ASIX":
                 degreeType = DegreeType.ASIX;
@@ -33,6 +34,7 @@ public class Degree {
                 subjects.add(new Subject("Gestion de Bases de Datos", "ASDADASD"));
                 subjects.add(new Subject("Administracion de Sistemas Operativos", "ASDADASD"));
                 subjects.add(new Subject("Planificacion y Administracion de Redes", "ASDADASD"));
+                description = "Administracion de Sistemas Informatico en Redes";
                 break;
             case "SMIX":
                 degreeType = DegreeType.SMIX;
@@ -40,6 +42,7 @@ public class Degree {
                 subjects.add(new Subject("Montajes y mantenimientos de Equipos", "ASDADASD"));
                 subjects.add(new Subject("Sistemas Operativos Monolito", "SADFDASD"));
                 subjects.add(new Subject("Redes Locales", "ASDADASD"));
+                description = "Sistemas microinformaticos y Redes";
                 break;
             default:
                 throw new IllegalArgumentException("The degree name doesn't exist!");

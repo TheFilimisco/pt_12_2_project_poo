@@ -2,6 +2,7 @@ package testApp;
 
 import models.degree.Degree;
 import models.auth.Auth;
+import models.degree.Subject;
 import models.forum.Forum;
 import models.forum.Posts_User;
 import models.user.Student;
@@ -12,19 +13,20 @@ import java.util.Scanner;
 
 public class TestAppForumPoblenou {
     public static void main(String[] args) {
-//        Student student = new Student("99999999X", "Steven", "nystepro@gmail.com",999999999,"12345678",new Degree("DAM", "Across Platform Apps"));
-//        System.out.println(student);
-//        Teacher teacher = new Teacher("99999999X", "Levi", "levi@gmail.com", 999999999, "12345678",new Degree("ASIX", "Security"));
-//        System.out.println(teacher);
-//
-//
+        Student student = new Student("99999999X", "Steven", "nystepro@gmail.com",999999999,"12345678", new Degree("DAM"));
+        System.out.println(student);
+        Teacher teacher = new Teacher("99999999X", "Levi", "levi@gmail.com", 999999999, "12345678",new Degree("ASIX"));
+        System.out.println(teacher);
 
-//        auth.register(student);
-//        auth.register(teacher);
+
 //
 //        System.out.println(auth.login("nystepro@gmail.com", "12345678"));
 
         Auth auth = new Auth();
+
+        auth.register(student);
+        auth.register(teacher);
+
         Forum forum = new Forum();
         Scanner input = new Scanner(System.in);
 
@@ -37,35 +39,50 @@ public class TestAppForumPoblenou {
             int inputNumberUser = input.nextInt();
             switch (inputNumberUser) {
                 case 1:
+                    input.nextLine();
+                    try {
                         newRegister(input,auth);
+                    } catch (Exception e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 2:
+                    input.nextLine();
+                    try {
                         User us = newLogin(input,auth);
                         menuWelcome(us);
-                    System.out.print("Put your Option:");
-                    int inputYourOption = input.nextInt();
-                        switch (inputYourOption){
-                            case 1:
-                                menuAdminUser();
-                                System.out.print("Put your Option:");
-                                int inputYourOptionAdmin = input.nextInt();
-                                switch (inputYourOptionAdmin) {
-                                    case 1:
-                                        System.out.println("=================Create new Post=================");
-                                        for (Posts_User postsUser: forum.getPostsUsers()){
-                                            if (postsUser.getUser().equals(us)){
-                                                postsUser.createNewPost("ASDASD","ASDASD","ASDASD",0 );
-                                            }
-                                        }
-
-
-                                }
-                                break;
-
-                        }
+                    } catch (Exception e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 3:
-                        User usAnonymous =  newLoginAnonymous(auth);
+                    input.nextLine();
+                    User usAnonymous =  newLoginAnonymous(auth);
+                    menuWelcomeAnonymous(usAnonymous);
+                    System.out.print("Put your option: ");
+                    int inputNumberUserOption = input.nextInt();
+                    switch (inputNumberUserOption){
+                        case 1:
+                            System.out.println("Show All Posts");
+                            forum.showAllPosts();
+                            break;
+                        case 2:
+                            System.out.println("Show Post for Degree");
+                            System.out.print("Enter your Degree: ");
+                            String inputDegree = input.nextLine();
+                            forum.showPostsForDegree(new Degree(inputDegree));
+                            break;
+                        case 3:
+                            System.out.println("Show Post for Subject");
+                            forum.showPostsForSubject(new Subject("ASDASD","ASDASDASD"));
+                            break;
+                        case 4:
+                            forum.showPostsForAuthor(new User());
+                            System.out.println("Show Post for Author");
+                            break;
+                        default:
+                            break;
+                    }
                     break;
                 case 4:
                     System.out.println("==================Leave=================");
@@ -75,17 +92,18 @@ public class TestAppForumPoblenou {
                     System.out.println("Error, Do put a correct number!");
             }
         }
-
     }
+
+
 
     public static void menuMain(){
         System.out.println("""
-                    ========================Welcome to Forum===============
+                    ===================Welcome to Forum of Institut Poblenou====================
                     1. Register
                     2. Login
                     3. Into without Register
                     4. Leave
-                    =======================================================
+                    ============================================================================
                     """);
     }
 
@@ -99,6 +117,7 @@ public class TestAppForumPoblenou {
                        4. Show Posts For Subject
                        5. Show Posts For Author(Student or Teacher)
                        6. Leave
+                       ========================================================
                        """,looggedUser.getName(),looggedUser.getRole());
     }
 
@@ -111,6 +130,7 @@ public class TestAppForumPoblenou {
                        3. Show Posts For Subject
                        4. Show Posts For Author(Student or Teacher)
                        5. Leave
+                       ========================================================
                        """,looggedUser.getName(),looggedUser.getRole());
     }
 
@@ -121,6 +141,7 @@ public class TestAppForumPoblenou {
                 2. Shows your Posts
                 3. Update your Post
                 4. Delete your Post
+                ========================================================
                 """);
     }
 
@@ -140,21 +161,32 @@ public class TestAppForumPoblenou {
         String inputPassword = input.nextLine();
         System.out.print("Put your Degree: ");
         String inputNameDegree = input.nextLine();
+        try {
+            selectYourUser(input,auth,inputDni,inputName,inputEmail,inputNumberPhone,inputPassword,inputNameDegree);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    private static void selectYourUser(Scanner input, Auth auth, String inputDni,String inputName, String inputEmail, int inputNumberPhone, String inputPassword, String inputNameDegree){
         System.out.println("""
                             1. Student
                             2. Teacher
-                            3. Back
                             """);
         System.out.print("Put your number: ");
         int inputYourOption = input.nextInt();
         if (inputYourOption==1){
             input.nextLine();
-            auth.register(new Student(inputDni,inputName, inputEmail, inputNumberPhone, inputPassword, new Degree(inputNameDegree,"XD")));
+            auth.register(new Student(inputDni,inputName, inputEmail, inputNumberPhone, inputPassword, new Degree(inputNameDegree)));
         } else if (inputYourOption==2) {
             input.nextLine();
-            auth.register(new Teacher(inputDni,inputName, inputEmail, inputNumberPhone, inputPassword, new Degree(inputNameDegree,"XD")));
+            auth.register(new Teacher(inputDni,inputName, inputEmail, inputNumberPhone, inputPassword, new Degree(inputNameDegree)));
+        } else {
+            throw new IllegalArgumentException("Please choose a option:(1-2)");
         }
     }
+
 
     public static User newLogin(Scanner input, Auth auth){
         System.out.println("=================Login==================");
@@ -166,7 +198,7 @@ public class TestAppForumPoblenou {
         if (loggedInUser!=null){
             return loggedInUser;
         }else {
-            throw new IllegalArgumentException("Don't possible!");
+            throw new IllegalArgumentException("Don't possible Log in!");
         }
     }
 
