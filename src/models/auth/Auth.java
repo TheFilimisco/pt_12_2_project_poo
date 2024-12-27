@@ -25,7 +25,7 @@ public class Auth {
     public void register(User user){
         for (User us: users) {
             if (us.getDni().equals(user.getDni())){
-                System.out.println("User is registered!");
+                throw new IllegalArgumentException("User is registered!");
             }
         }
         users.add(user);

@@ -58,9 +58,7 @@ public class Forum {
     public void showPostsForAuthor(User user){
         for (Posts_User postsUser: postsUsers){
             for (Post post: postsUser.getPosts()){
-                if (post.getAuthor() instanceof Teacher){
-                    System.out.println(post);
-                } else if (post.getAuthor() instanceof Student) {
+                if (user.getRole().equals(post.getAuthor().getRole())){
                     System.out.println(post);
                 }
             }

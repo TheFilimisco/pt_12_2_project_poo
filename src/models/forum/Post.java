@@ -114,14 +114,16 @@ public class Post {
 
     @Override
     public String toString() {
-        return "Post{" +
-                "\nidPost=" + idPost +
+        return "=======================================================" +
+                "\nPost{" +
+                "idPost=" + idPost +
                 "\ntitle='" + title + '\'' +
                 "\nauthor=" + author +
                 "\ntypeOfPost=" + typeOfPost +
                 "\ndescription='" + description + '\'' +
                 "\ndate=" + date +
                 "\ndegree=" + degree +
+                "=====================================================" +
                 '}';
     }
 

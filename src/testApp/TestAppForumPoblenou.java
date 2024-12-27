@@ -4,6 +4,7 @@ import models.degree.Degree;
 import models.auth.Auth;
 import models.degree.Subject;
 import models.forum.Forum;
+import models.forum.Post;
 import models.forum.Posts_User;
 import models.user.Student;
 import models.user.Teacher;
@@ -13,21 +14,55 @@ import java.util.Scanner;
 
 public class TestAppForumPoblenou {
     public static void main(String[] args) {
+
+
+
+        // Create some Users
+        // Student
         Student student = new Student("99999999X", "Steven", "nystepro@gmail.com",999999999,"12345678", new Degree("DAM"));
-        System.out.println(student);
-        Teacher teacher = new Teacher("99999999X", "Levi", "levi@gmail.com", 999999999, "12345678",new Degree("ASIX"));
-        System.out.println(teacher);
-
-
-//
-//        System.out.println(auth.login("nystepro@gmail.com", "12345678"));
+        Student student2 = new Student("99999990X", "Manolito", "nystepro@gmail.com",999999999,"12345678", new Degree("ASIX"));
+        Student student3 = new Student("99999991X", "Vegeta777", "nystepro@gmail.com",999999999,"12345678", new Degree("SMIX"));
+        // Teacher
+        Teacher teacher = new Teacher("99999993X", "Levi", "levi@gmail.com", 999999999, "12345678",new Degree("ASIX"));
 
         Auth auth = new Auth();
+        // Generate Some posts for Student
+        Posts_User postsUserStudent =new Posts_User(student);
+        postsUserStudent.createNewPost("I need Infomation of DAM","Doubts", "I have a lot of doubts",0);
+        postsUserStudent.createNewPost("I have QUESTION!","Questions", "I have a questions",0);
+        postsUserStudent.createNewPost("I need a TEAM","Events", "I need a events",0);
+
+        Posts_User postsUserStudent2 =new Posts_User(student2);
+        postsUserStudent2.createNewPost("I need Infomation of DAM student2","Doubts", "I have a lot of doubts",0);
+        postsUserStudent2.createNewPost("I have QUESTION! student2","Questions", "I have a questions",0);
+        postsUserStudent2.createNewPost("I need a TEAM student2","Events", "I need a events",0);
+
+        Posts_User postsUserStudent3 =new Posts_User(student3);
+        postsUserStudent3.createNewPost("I need Infomation of DAM student3","Doubts", "I have a lot of doubts",0);
+        postsUserStudent3.createNewPost("I have QUESTION! student3","Questions", "I have a questions",0);
+        postsUserStudent3.createNewPost("I need a TEAM student3","Events", "I need a events",0);
+
+
+        // Generate some Posts for Teacher
+        Posts_User postsUserTeacher = new Posts_User(teacher);
+        postsUserTeacher.createNewPost("Need students for a project","Events", "Need students of DAM or ASIX, for a project",0);
+        postsUserTeacher.createNewPost("Second call for project","Events", "Need students of DAM or ASIX, for a project",0);
+        postsUserTeacher.createNewPost("Need a Frontend Developer","Events", "Need students of DAM or ASIX, for a project",0);
+
 
         auth.register(student);
         auth.register(teacher);
+        auth.register(student2);
+        auth.register(student3);
 
         Forum forum = new Forum();
+
+        forum.getPostsUsers().add(postsUserStudent);
+        forum.getPostsUsers().add(postsUserStudent2);
+        forum.getPostsUsers().add(postsUserStudent3);
+        forum.getPostsUsers().add(postsUserTeacher);
+
+
         Scanner input = new Scanner(System.in);
 
         boolean runningUser= true;
@@ -57,32 +92,13 @@ public class TestAppForumPoblenou {
                     break;
                 case 3:
                     input.nextLine();
-                    User usAnonymous =  newLoginAnonymous(auth);
-                    menuWelcomeAnonymous(usAnonymous);
-                    System.out.print("Put your option: ");
-                    int inputNumberUserOption = input.nextInt();
-                    switch (inputNumberUserOption){
-                        case 1:
-                            System.out.println("Show All Posts");
-                            forum.showAllPosts();
-                            break;
-                        case 2:
-                            System.out.println("Show Post for Degree");
-                            System.out.print("Enter your Degree: ");
-                            String inputDegree = input.nextLine();
-                            forum.showPostsForDegree(new Degree(inputDegree));
-                            break;
-                        case 3:
-                            System.out.println("Show Post for Subject");
-                            forum.showPostsForSubject(new Subject("ASDASD","ASDASDASD"));
-                            break;
-                        case 4:
-                            forum.showPostsForAuthor(new User());
-                            System.out.println("Show Post for Author");
-                            break;
-                        default:
-                            break;
+                    try {
+                        User usAnonymous =  newLoginAnonymous(auth);
+                        secondLevel(input,forum,usAnonymous);
+                    } catch (Exception e){
+                        System.out.println(e.getMessage());
                     }
+
                     break;
                 case 4:
                     System.out.println("==================Leave=================");
@@ -205,6 +221,86 @@ public class TestAppForumPoblenou {
     public static User newLoginAnonymous(Auth auth){
         System.out.println("=============Login Anonymous============");
         return auth.login();
+    }
+
+
+    private static Degree searchDegree(String inputDegree, Forum forum ){
+        for (Posts_User postsUser: forum.getPostsUsers()){
+            for (Post post : postsUser.getPosts()){
+                if (post.getDegree().getDegreeType().equals(Degree.DegreeType.valueOf(inputDegree))){
+                    return post.getDegree();
+                }
+            }
+        }
+        throw new IllegalArgumentException("This Degree doesn't exist!");
+    }
+
+    private static Subject searchSubject(String inputSubject, Forum forum ){
+        for (Posts_User postsUser: forum.getPostsUsers()){
+            for (Post post : postsUser.getPosts()){
+                for (Subject subject: post.getDegree().getSubjects()){
+                    if (subject.getName().equals(inputSubject)){
+                        return subject;
+                    }
+                }
+            }
+        }
+        throw new IllegalArgumentException("This Subject doesn't exist!");
+    }
+
+    private static User searchTypeOfUser(String inputTypeUser, Forum forum){
+        for (Posts_User postsUser: forum.getPostsUsers()){
+            if (postsUser.getUser().getRole().equals(inputTypeUser)){
+                return postsUser.getUser();
+            }
+        }
+        throw new IllegalArgumentException("This User doesnt exist!");
+    }
+
+
+
+    public static void secondLevel(Scanner input,Forum forum, User usAnonymous){
+        boolean running = true;
+        while (running){
+            menuWelcomeAnonymous(usAnonymous);
+        System.out.print("Put your option: ");
+        int inputNumberUserOption = input.nextInt();
+        switch (inputNumberUserOption){
+            case 1:
+                System.out.println("======================Show All Posts==================");
+                forum.showAllPosts();
+                break;
+            case 2:
+                input.nextLine();
+                System.out.println("======================Show Post for Degree=============");
+                System.out.print("Enter your Degree:");
+                String inputYourDegree = input.nextLine();
+                forum.showPostsForDegree(searchDegree(inputYourDegree,forum));
+                break;
+            case 3:
+                input.nextLine();
+                System.out.println("====================Show Post for Subject=============");
+                System.out.print("Enter your Subject:");
+                String inputYourSubject = input.nextLine();
+                forum.showPostsForSubject(searchSubject(inputYourSubject,forum));
+                break;
+            case 4:
+                input.nextLine();
+                System.out.println("=====================Show Posts of Student or Teacher");
+                System.out.print("Enter your Type of user:");
+                String inputTypeOfUser = input.nextLine();
+                forum.showPostsForAuthor(searchTypeOfUser(inputTypeOfUser,forum));
+                System.out.println("Show Post for Author");
+                break;
+            case 5:
+                System.out.println("back....");
+                running = false;
+                break;
+            default:
+                System.out.println("Do write correct option!...");
+                break;
+            }
+        }
     }
 
 

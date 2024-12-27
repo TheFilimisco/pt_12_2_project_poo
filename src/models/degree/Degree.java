@@ -1,8 +1,7 @@
 package models.degree;
 
 import java.util.ArrayList;
-
-
+import java.util.Objects;
 
 
 public class Degree {
@@ -81,6 +80,19 @@ public class Degree {
 
     public void setSubjects(ArrayList<Subject> subjects) {
         this.subjects = subjects;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Degree degree = (Degree) o;
+        return idDegree == degree.idDegree && degreeType == degree.degreeType && Objects.equals(description, degree.description) && Objects.equals(subjects, degree.subjects);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idDegree, degreeType, description, subjects);
     }
 
     @Override
