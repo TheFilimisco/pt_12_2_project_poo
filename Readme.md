@@ -1,6 +1,6 @@
 # Project POO RA2
 
-## This forum app about Institut Poblenou, where you will can do questions, doubts, Helps to community,where you find out topics specific and modified your profile and create Post, Update, Reads and Delete.
+## This forum app about Institut Poblenou, where you will do questions, doubts, Helps to community,where you find out topics specific and modified your profile and create Post, Update, Reads and Delete.
 
 ### Introduction
 
