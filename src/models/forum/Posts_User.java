@@ -46,8 +46,10 @@ public class Posts_User {
     public void createNewPost(String title, String typeOfPost, String description, int inputYourDegree){
         if (user instanceof Student){
             posts.add(new Post(title,user,typeOfPost,description,LocalDate.now(),((Student) user).getAssignedDegree()));
+            System.out.println("Successful!");
         } else if (user instanceof Teacher) {
             posts.add(new Post(title,user,typeOfPost,description,LocalDate.now(),((Teacher) user).getAssignedDegrees().get(inputYourDegree)));
+            System.out.println("Successful!");
         } else {
             throw new IllegalArgumentException("Just if you're Student or Teacher, Please return to Register...");
         }
@@ -56,6 +58,14 @@ public class Posts_User {
     public void showPosts(){
         for (Post post: posts){
             System.out.println(post);
+        }
+    }
+
+    public void searchPost(int idPost){
+        for (Post post: posts){
+            if (post.getIdPost()==idPost){
+                System.out.println(post);
+            }
         }
     }
 
