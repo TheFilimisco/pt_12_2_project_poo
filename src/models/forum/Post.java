@@ -118,19 +118,14 @@ public class Post {
                 "\nPost{" +
                 "idPost=" + idPost +
                 "\ntitle='" + title + '\'' +
-                "\nauthor=" + author +
+                "\nauthor=" + author.getName() +
                 "\ntypeOfPost=" + typeOfPost +
                 "\ndescription='" + description + '\'' +
                 "\ndate=" + date +
-                "\ndegree=" + degree +
-                "=====================================================" +
-                '}';
+                "\ndegree=" + degree.getDegreeType() +
+                '}' + "\n";
     }
 
-    //    public static void main(String[] args) {
-//        Post post = new Post("Alguien me puede ayudar", new User(), "Doubts", "Que necesito ayuda en matematicas", LocalDate.now());
-//        System.out.println(post);
-//    }
 
 
 }

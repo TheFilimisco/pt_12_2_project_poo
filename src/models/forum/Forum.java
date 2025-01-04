@@ -9,6 +9,7 @@ import models.user.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Forum {
     private ArrayList<Posts_User> postsUsers;
@@ -65,6 +66,24 @@ public class Forum {
         }
     }
 
+    public void searchPostTotal(Scanner input){
+        while (true){
+            System.out.println("Search Post (write exit for leave): ");
+            String inputTitlePost = input.nextLine().toLowerCase();
 
+            if (inputTitlePost.equals("exit")){
+                break;
+            }
+
+            System.out.println("\nSearch: \n");
+            for (Posts_User postsUser: postsUsers){
+                for (Post post: postsUser.getPosts()){
+                    if (post.getTitle().toLowerCase().replace(" ", "").contains(inputTitlePost.toLowerCase().replace(" ", ""))){
+                        System.out.println(post);
+                    }
+                }
+            }
+        }
+    }
 
 }

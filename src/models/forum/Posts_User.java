@@ -61,12 +61,14 @@ public class Posts_User {
         }
     }
 
-    public void searchPost(int idPost){
+    public int searchPostUser(int idPost){
         for (Post post: posts){
             if (post.getIdPost()==idPost){
                 System.out.println(post);
+                return post.getIdPost();
             }
         }
+        throw new IllegalArgumentException("This id doesn't " + idPost + " exit");
     }
 
     public void updatePosts(int inputYourPost, String newTitle, String newDescription){
@@ -93,18 +95,4 @@ public class Posts_User {
                 '}';
     }
 
-//    public static void main(String[] args) {
-//        Posts_User newPostsUser = new Posts_User(new User());
-//        newPostsUser.createNewPost("1Dudas dudas", "Doubts", "DUDAS DUDAS");
-//        newPostsUser.createNewPost("2Dudas dudas", "Doubts", "DUDAS DUDAS");
-//        newPostsUser.createNewPost("3Dudas dudas", "Doubts", "DUDAS DUDAS");
-//        newPostsUser.showPosts();
-//        System.out.println("===========================================================================");
-//        newPostsUser.updatePosts(0,"Ya no quiero dudas", "No quiero mas dudas");
-//        newPostsUser.showPosts();
-//
-//        System.out.println("===========================================================================");
-//        newPostsUser.deletePost(0);
-//        newPostsUser.showPosts();
-//    }
 }

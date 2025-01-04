@@ -1,4 +1,4 @@
-package testApp;
+package view;
 
 import models.auth.Auth;
 import models.degree.Degree;
@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 public class UI {
 
-    public void menuMain(){
+    private void menuMain(){
         System.out.println("""
                     ===================Welcome to Forum of Institut Poblenou====================
                     1. Register
@@ -25,7 +25,7 @@ public class UI {
                     """);
     }
 
-    public void menuWelcome(User looggedUser){
+    private void menuWelcome(User looggedUser){
         System.out.printf("""
                        ======================Welcome to Forum %s===============
                        =============================%s=========================
@@ -34,12 +34,13 @@ public class UI {
                        3. Show Posts For Degree
                        4. Show Posts For Subject
                        5. Show Posts For Author(Student or Teacher)
-                       6. Back
+                       6. Search Post
+                       7. Back
                        ========================================================
                        """,looggedUser.getName(),looggedUser.getRole());
     }
 
-    public void menuAdminUser(){
+    private void menuAdminUser(){
         System.out.println("""
                 ========================Admin your Profile======================
                 1. Create New Post
@@ -47,7 +48,7 @@ public class UI {
                 3. Update your Post
                 4. Delete your Post
                 5. Back
-                ========================================================
+                ================================================================
                 """);
     }
 
@@ -191,18 +192,23 @@ public class UI {
                     break;
                 case 5:
                     input.nextLine();
-                    System.out.println("=====================Show Posts of Student or Teacher");
+                    System.out.println("=================Show Posts of Student or Teacher======");
                     System.out.print("Enter your Type of user:");
                     String inputTypeOfUser = input.nextLine();
                     forum.showPostsForAuthor(searchTypeOfUser(inputTypeOfUser,forum));
                     System.out.println("Show Post for Author");
                     break;
                 case 6:
+                    input.nextLine();
+                    System.out.println("=================Search Post================");
+                    forum.searchPostTotal(input);
+                    break;
+                case 7:
                     System.out.println("back....");
                     running = false;
                     break;
                 default:
-                    System.out.println("Do write correct option!...");
+                    System.out.println("Do write right option!...");
                     break;
             }
         }
@@ -239,11 +245,17 @@ public class UI {
                     System.out.println("==============Update your Post===============");
                     System.out.print("Put id of your Post:");
                     int inputIdPost = input.nextInt();
+                    try {
+                        System.out.println(postsUser.searchPostUser(inputIdPost));
+                    } catch (Exception e){
+                        System.out.println(e.getMessage());
+                        break;
+                    }
+                    input.nextLine();
                     System.out.print("Put new Title: ");
                     String inputNewTitle = input.nextLine();
                     System.out.print("Put new Description: ");
                     String inputNewDescription = input.nextLine();
-                    postsUser.searchPost(inputIdPost);
                     postsUser.updatePosts(inputIdPost,inputNewTitle,inputNewDescription);
                     break;
                 case 4:
@@ -293,7 +305,7 @@ public class UI {
 
 
 
-    public void handleException(Runnable action) {
+    private void handleException(Runnable action) {
         try {
             action.run();
         } catch (Exception e) {
