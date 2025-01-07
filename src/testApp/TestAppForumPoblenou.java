@@ -22,9 +22,9 @@ public class TestAppForumPoblenou {
 //         Create some Users
 
         // Student
-        Student student1 = new Student("99999999X", "Steven", "nystepro@gmail.com",999999999,"12345678", new Degree("DAM"));
-        Student student2 = new Student("99999990X", "Manolito", "nystepro@gmail.com",999999999,"12345678", new Degree("ASIX"));
-        Student student3 = new Student("99999991X", "Vegeta777", "nystepro@gmail.com",999999999,"12345678", new Degree("SMIX"));
+        Student student1 = new Student("99999999X", "Steven", "nystepro1@gmail.com",999999999,"12345678", new Degree("DAM"));
+        Student student2 = new Student("99999990X", "Manolito", "nystepro2@gmail.com",999999999,"12345678", new Degree("ASIX"));
+        Student student3 = new Student("99999991X", "Vegeta777", "nystepro3@gmail.com",999999999,"12345678", new Degree("SMIX"));
         // Teacher
         Teacher teacher = new Teacher("99999993X", "Levi", "levi@gmail.com", 999999999, "12345678",new Degree("ASIX"));
 
