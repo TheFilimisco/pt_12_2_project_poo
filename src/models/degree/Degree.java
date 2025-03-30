@@ -1,70 +1,33 @@
 package models.degree;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
 
-
 public class Degree {
-    private int idDegree;
-    private DegreeType degreeType;
+    final private int idDegree;
+    final private String nameDegree;
+    final private HashSet<Subject> subjects;
     private String description;
-    private ArrayList<Subject> subjects;
     private static int counterDegree = 0;
 
-
-    public enum DegreeType{
-        DAM,ASIX,SMIX
-    }
-
-    public Degree(String degreeName) {
-        this.idDegree = counterDegree++;
-        switch (degreeName){
-            case "DAM":
-                degreeType = DegreeType.DAM;
-                subjects = new ArrayList<>();
-                subjects.add(new Subject("Sistemas Informaticos", "ASDADASD"));
-                subjects.add(new Subject("Bases de Datos", "ASDADASD"));
-                subjects.add(new Subject("Programacion", "ASDADASD"));
-                description = "Desarrollo de aplicaciones multiplataformas";
-                break;
-            case "ASIX":
-                degreeType = DegreeType.ASIX;
-                subjects = new ArrayList<>();
-                subjects.add(new Subject("Gestion de Bases de Datos", "ASDADASD"));
-                subjects.add(new Subject("Administracion de Sistemas Operativos", "ASDADASD"));
-                subjects.add(new Subject("Planificacion y Administracion de Redes", "ASDADASD"));
-                description = "Administracion de Sistemas Informatico en Redes";
-                break;
-            case "SMIX":
-                degreeType = DegreeType.SMIX;
-                subjects = new ArrayList<>();
-                subjects.add(new Subject("Montajes y mantenimientos de Equipos", "ASDADASD"));
-                subjects.add(new Subject("Sistemas Operativos Monolito", "SADFDASD"));
-                subjects.add(new Subject("Redes Locales", "ASDADASD"));
-                description = "Sistemas microinformaticos y Redes";
-                break;
-            default:
-                throw new IllegalArgumentException("The degree name doesn't exist!");
-        }
+    public Degree(String nameDegree, String description) {
+        idDegree = counterDegree++;
+        this.nameDegree = nameDegree;
         this.description = description;
-    }
-
-    public DegreeType getDegreeType() {
-        return degreeType;
-    }
-
-    public void setDegreeType(DegreeType degreeType) {
-        this.degreeType = degreeType;
+        subjects = new HashSet<>();
     }
 
     public int getIdDegree() {
         return idDegree;
     }
 
-    public void setIdDegree(int idDegree) {
-        this.idDegree = idDegree;
+    public String getNameDegree() {
+        return nameDegree;
     }
 
+    public HashSet<Subject> getSubjects() {
+        return subjects;
+    }
 
     public String getDescription() {
         return description;
@@ -74,35 +37,33 @@ public class Degree {
         this.description = description;
     }
 
-    public ArrayList<Subject> getSubjects() {
-        return subjects;
+    public static int getCounterDegree() {
+        return counterDegree;
     }
 
-    public void setSubjects(ArrayList<Subject> subjects) {
-        this.subjects = subjects;
+    public static void setCounterDegree(int counterDegree) {
+        Degree.counterDegree = counterDegree;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Degree degree = (Degree) o;
-        return idDegree == degree.idDegree && degreeType == degree.degreeType && Objects.equals(description, degree.description) && Objects.equals(subjects, degree.subjects);
+        return idDegree == degree.idDegree;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idDegree, degreeType, description, subjects);
+        return Objects.hashCode(idDegree);
     }
 
     @Override
     public String toString() {
         return "Degree{" +
                 "idDegree=" + idDegree +
-                ", name='" + degreeType + '\'' +
+                ", nameDegree='" + nameDegree + '\'' +
+                ", subjects=" + subjects +
                 ", description='" + description + '\'' +
-                ", subjects='" + subjects + '\'' +
                 '}';
     }
-
 }

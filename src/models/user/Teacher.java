@@ -1,35 +1,39 @@
 package models.user;
 
 import models.degree.Degree;
-
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Teacher extends User{
-    private ArrayList<Degree> assignedDegrees;
+    private final HashSet<Degree> degreesAssigned;
 
-    public Teacher(String dni, String name, String email, int phoneNumber, String password, Degree assignedDegree) {
+    public Teacher(String dni, String name, String email, String phoneNumber, String password) {
         super(dni, name, email, phoneNumber, password);
-        assignedDegrees = new ArrayList<>();
-        assignedDegrees.add(assignedDegree);
+        degreesAssigned = new HashSet<>();
     }
 
-    public ArrayList<Degree> getAssignedDegrees() {
-        return assignedDegrees;
-    }
-
-    public void setAssignedDegrees(ArrayList<Degree> assignedDegrees) {
-        this.assignedDegrees = assignedDegrees;
-    }
-
-    @Override
-    public String getRole() {
-        return "Teacher";
+    public HashSet<Degree> getDegreesAssigned() {
+        return degreesAssigned;
     }
 
     @Override
     public String toString() {
         return "Teacher{" +
-                "assignedDegrees=" + assignedDegrees +
+                "degreesAssigned=" +
+                degreesAssigned +
                 "} " + super.toString();
     }
+
+//    public static void main(String[] args) {
+//
+//        Teacher teacher = new Teacher("99999993X", "Levi", "levi@gmail.com", 999999999, "12345678");
+//        teacher.getDegreesAssigned().add(new Degree("ASIX"));
+//        teacher.getDegreesAssigned().add(new Degree("DAM"));
+//
+//        teacher.getDegreesAssigned().forEach( degree -> {
+//            System.out.println(degree.getDegreeType());
+//        });
+//
+//        System.out.println(teacher);
+//    }
+
 }

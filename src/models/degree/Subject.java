@@ -1,31 +1,25 @@
 package models.degree;
 
+import java.util.Objects;
+
 public class Subject {
-    private int idSubject;
-    private String name;
+    final private int idSubject;
+    final private String name;
     private String description;
     private static int counterDegree = 0;
 
     public Subject(String name, String description) {
-        this.idSubject = counterDegree++;
         this.name = name;
         this.description = description;
+        idSubject = counterDegree++;
     }
 
     public int getIdSubject() {
         return idSubject;
     }
 
-    public void setIdSubject(int idSubject) {
-        this.idSubject = idSubject;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {
@@ -34,6 +28,18 @@ public class Subject {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Subject subject = (Subject) o;
+        return idSubject == subject.idSubject;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(idSubject);
     }
 
     @Override

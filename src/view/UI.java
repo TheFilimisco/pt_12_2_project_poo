@@ -1,224 +1,195 @@
 package view;
 
-import models.auth.Auth;
+
+import controller.serviceauthorization.IServiceManagerAuth;
+import controller.serviceauthorization.LoginRequestDTO;
+import controller.servicedegree.IServiceManagerDegree;
+import controller.serviceforum.IServiceForum;
+import controller.serviceprofileuser.IServiceManagerProfileUser;
+import controller.serviceprofileuser.TypeOfPost;
 import models.degree.Degree;
 import models.degree.Subject;
-import models.forum.Forum;
 import models.forum.Post;
-import models.forum.Posts_User;
+import models.forum.ProfileUser;
 import models.user.Student;
 import models.user.Teacher;
 import models.user.User;
+import view.menu.IMenuTemplate;
 
+
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class UI {
 
-    private void menuMain(){
-        System.out.println("""
-                    ===================Welcome to Forum of Institut Poblenou====================
-                    1. Register
-                    2. Login
-                    3. Into without Register
-                    4. Leave
-                    ============================================================================
-                    """);
-    }
 
-    private void menuWelcome(User looggedUser){
-        System.out.printf("""
-                       ======================Welcome to Forum %s===============
-                       =============================%s=========================
-                       1. Access your Admin
-                       2. Show All Posts
-                       3. Show Posts For Degree
-                       4. Show Posts For Subject
-                       5. Show Posts For Author(Student or Teacher)
-                       6. Search Post
-                       7. Back
-                       ========================================================
-                       """,looggedUser.getName(),looggedUser.getRole());
-    }
-
-    private void menuAdminUser(){
-        System.out.println("""
-                ========================Admin your Profile======================
-                1. Create New Post
-                2. Shows your Posts
-                3. Update your Post
-                4. Delete your Post
-                5. Back
-                ================================================================
-                """);
+    public void mainLevel(Scanner input, IMenuTemplate menu, IServiceManagerAuth managerAuth, IServiceForum managerForum, IServiceManagerDegree managerDegree, IServiceManagerProfileUser managerProfileUser) {
+        boolean running= true;
+        while (running){
+            menu.showMenuMain();
+            System.out.print("Put your option: ");
+            int inputNumberUser = input.nextInt();
+            switch (inputNumberUser) {
+                case 1:
+                    handleException(() -> managerAuth.register(selectOptionUser(input,managerDegree), managerForum));
+                    break;
+                case 2:
+                    handleException(() -> secondLevel(input, menu, managerForum, managerAuth.login(createLoginRequest(input)), managerProfileUser, managerDegree));
+                    break;
+                case 3:
+                    System.out.println("==================Leave=================");
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid input, please try again");
+            }
+        }
     }
 
 
-    public void newRegister(Scanner input, Auth auth ){
+    private Student createStudent(Scanner input, IServiceManagerDegree managerDegree) {
         input.nextLine();
-        System.out.println("=================Register===============");
-        System.out.print("Put your DNI: ");
-        String inputDni = input.nextLine();
-        System.out.print("Put your name: ");
-        String inputName = input.nextLine();
-        System.out.print("Put your email: ");
-        String inputEmail = input.nextLine();
-        System.out.print("Put your phone number: ");
-        int inputNumberPhone = input.nextInt();
+        System.out.println("==========Create Student==========");
+        System.out.print("Enter Student DNI: ");
+        String dni = input.nextLine();
+        System.out.print("Enter Student Name: ");
+        String name = input.nextLine();
+        System.out.print("Enter Student Email: ");
+        String email = input.nextLine();
+        System.out.print("Enter Student Phone Number: ");
+        String phoneNumber = input.nextLine();
+        System.out.print("Enter Student Password: ");
+        String password = input.nextLine();
+        var degree = searchDegree(input, managerDegree);
+        return  new Student(dni, name, email, phoneNumber, password, degree);
+    }
+
+    private Degree searchDegree(Scanner input, IServiceManagerDegree managerDegree) {
+        System.out.println("==========Search Degree By Key==========");
+        System.out.print("Enter Degree Key: ");
+        int inputNameDegree = input.nextInt();
+        return managerDegree.getDegree(inputNameDegree);
+    }
+
+    private Teacher createTeacher(Scanner input){
         input.nextLine();
-        System.out.print("Put your password: ");
-        String inputPassword = input.nextLine();
-        System.out.print("Put your Degree: ");
-        String inputNameDegree = input.nextLine();
-        try {
-            selectYourUser(input,auth,inputDni,inputName,inputEmail,inputNumberPhone,inputPassword,inputNameDegree);
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-
+        System.out.println("==========Create Teacher==========");
+        System.out.print("Enter Teacher DNI: ");
+        String dni = input.nextLine();
+        System.out.print("Enter Teacher Name: ");
+        String name = input.nextLine();
+        System.out.print("Enter Teacher Email: ");
+        String email = input.nextLine();
+        System.out.print("Enter Teacher Phone Number: ");
+        String phoneNumber = input.nextLine();
+        System.out.print("Enter Teacher Password: ");
+        String password = input.nextLine();
+        return new Teacher(dni, name, email, phoneNumber, password);
     }
 
-    private void selectYourUser(Scanner input, Auth auth, String inputDni,String inputName, String inputEmail, int inputNumberPhone, String inputPassword, String inputNameDegree){
-        System.out.println("""
-                            1. Student
-                            2. Teacher
-                            """);
-        System.out.print("Put your number: ");
-        int inputYourOption = input.nextInt();
-        if (inputYourOption==1){
-            input.nextLine();
-            auth.register(new Student(inputDni,inputName, inputEmail, inputNumberPhone, inputPassword, new Degree(inputNameDegree)));
-        } else if (inputYourOption==2) {
-            input.nextLine();
-            auth.register(new Teacher(inputDni,inputName, inputEmail, inputNumberPhone, inputPassword, new Degree(inputNameDegree)));
-        } else {
-            throw new IllegalArgumentException("Please choose a option:(1-2)");
-        }
+    private Degree createDegree(Scanner input){
+        System.out.println("==========Create Degree==========");
+        System.out.print("Enter Degree Name: ");
+        String name = input.nextLine();
+        System.out.print("Enter description: ");
+        String description = input.nextLine();
+        return new Degree(name, description);
     }
 
-
-    public User newLogin(Scanner input, Auth auth){
+    private Subject createSubject(Scanner input){
         input.nextLine();
-        System.out.println("=================Login==================");
-        System.out.print("Put your email: ");
-        String inputYourEmail = input.nextLine();
-        System.out.print("Put your password: ");
-        String inputYourPassword = input.nextLine();
-        User loggedInUser = auth.login(inputYourEmail,inputYourPassword);
-        if (loggedInUser!=null){
-            return loggedInUser;
-        }else {
-            throw new IllegalArgumentException("Don't possible Log in!");
+        System.out.println("==========Create Subject==========");
+        System.out.print("Enter Subject Name: ");
+        String name = input.nextLine();
+        System.out.print("Enter description: ");
+        String description = input.nextLine();
+        return new Subject(name, description);
+    }
+
+    private User selectOptionUser(Scanner input, IServiceManagerDegree managerDegree) {
+        input.nextLine();
+        System.out.println("==========Select Option Register==========");
+        System.out.println("1. Add Student");
+        System.out.println("2. Add Teacher");
+        System.out.print("Enter Option: ");
+        int inputNumberOption = input.nextInt();
+        switch (inputNumberOption) {
+            case 1:
+                return createStudent(input,managerDegree);
+            case 2:
+                return createTeacher(input);
+            default:
+                System.out.println("Invalid input, please try again");
         }
+        return null;
     }
 
-    public User newLoginAnonymous(Auth auth){
-        System.out.println("=============Login Anonymous============");
-        return auth.login();
+    private LoginRequestDTO createLoginRequest(Scanner input){
+        input.nextLine();
+        System.out.println("==========Enter your Data==========");
+        System.out.print("Enter DNI: ");
+        String dni = input.nextLine();
+        System.out.println("Enter Password: ");
+        String password = input.nextLine();
+        return new LoginRequestDTO(dni, password);
     }
 
-
-    private static Degree searchDegree(String inputDegree, Forum forum ){
-        for (Posts_User postsUser: forum.getPostsUsers()){
-            for (Post post : postsUser.getPosts()){
-                if (post.getDegree().getDegreeType().equals(Degree.DegreeType.valueOf(inputDegree))){
-                    return post.getDegree();
-                }
-            }
-        }
-        throw new IllegalArgumentException("This Degree doesn't exist!");
-    }
-
-    private static Subject searchSubject(String inputSubject, Forum forum ){
-        for (Posts_User postsUser: forum.getPostsUsers()){
-            for (Post post : postsUser.getPosts()){
-                for (Subject subject: post.getDegree().getSubjects()){
-                    if (subject.getName().equals(inputSubject)){
-                        return subject;
-                    }
-                }
-            }
-        }
-        throw new IllegalArgumentException("This Subject doesn't exist!");
-    }
-
-    private static User searchTypeOfUser(String inputTypeUser, Forum forum){
-        for (Posts_User postsUser: forum.getPostsUsers()){
-            if (postsUser.getUser().getRole().equals(inputTypeUser)){
-                return postsUser.getUser();
-            }
-        }
-        throw new IllegalArgumentException("This User doesn't exist!");
-    }
-
-    private static Posts_User searchProfile(User user, Forum forum){
-        for (Posts_User postsUser: forum.getPostsUsers()){
-            if (postsUser.getUser().equals(user)){
-                return postsUser;
-            }
-        }
-        throw new IllegalArgumentException("This Profile doesn't exist");
-    }
-
-
-
-    public void secondLevel(Scanner input,Forum forum, User user){
+    private void secondLevel(Scanner input, IMenuTemplate menu, IServiceForum managerForum, User user, IServiceManagerProfileUser managerProfileUser, IServiceManagerDegree managerDegree) {
         boolean running = true;
         while (running){
-            menuWelcome(user);
+            menu.showMenuForum(user);
             System.out.print("Put your option: ");
             int inputNumberUserOption = input.nextInt();
             switch (inputNumberUserOption){
                 case 1:
                     System.out.println("...acceding");
-                    thirdLevel(input,searchProfile(user,forum));
+                    thirdLevel(input,managerForum.getProfileUser(user.getUserId()),menu, managerProfileUser, managerDegree);
+
                     break;
-                case 2:
-                    System.out.println("======================Show All Posts==================");
-                    forum.showAllPosts();
+                  case 2:
+                      System.out.println("======================Show All Posts==================");
+                      managerForum.showForum();
                     break;
-                case 3:
-                    input.nextLine();
-                    System.out.println("======================Show Post for Degree=============");
-                    System.out.print("Enter your Degree:");
-                    String inputYourDegree = input.nextLine();
-                    forum.showPostsForDegree(searchDegree(inputYourDegree,forum));
+                  case 3:
+                      input.nextLine();
+                      System.out.println("======================Show Post for Degree=============");
+                      System.out.print("Enter your Degree:");
+                      String inputYourDegree = input.nextLine();
+                      managerForum.showPostsByDegree(inputYourDegree);
                     break;
-                case 4:
-                    input.nextLine();
-                    System.out.println("====================Show Post for Subject=============");
-                    System.out.print("Enter your Subject:");
-                    String inputYourSubject = input.nextLine();
-                    forum.showPostsForSubject(searchSubject(inputYourSubject,forum));
+                  case 4:
+                      input.nextLine();
+                      System.out.println("====================Show Post for Subject=============");
+                      System.out.print("Enter your Subject:");
+                      String inputYourSubject = input.nextLine();
+                      managerForum.showPostsBySubject(inputYourSubject);
                     break;
-                case 5:
-                    input.nextLine();
-                    System.out.println("=================Show Posts of Student or Teacher======");
-                    System.out.print("Enter your Type of user:");
-                    String inputTypeOfUser = input.nextLine();
-                    forum.showPostsForAuthor(searchTypeOfUser(inputTypeOfUser,forum));
-                    System.out.println("Show Post for Author");
+                  case 5:
+                      input.nextLine();
+                      System.out.println("=================Show Posts of Student or Teacher======");
+                      System.out.print("Enter your Type of user:");
+                      String inputTypeOfUser = input.nextLine();
+                      managerForum.showPostsByUser(inputTypeOfUser);
                     break;
-                case 6:
-                    input.nextLine();
-                    System.out.println("=================Search Post================");
-                    forum.searchPostTotal(input);
+                  case 6:
+                      input.nextLine();
+                      System.out.println("=================Search Post================");
+                      managerForum.showPostsByTopic(input);
                     break;
-                case 7:
-                    System.out.println("back....");
-                    running = false;
-                    break;
-                default:
-                    System.out.println("Do write right option!...");
-                    break;
+                  case 7:
+                      System.out.println("back....");
+                      running = false;
+                      break;
+                  default:
+                      System.out.println("Do write right option!...");
             }
         }
     }
 
-
-    public void thirdLevel(Scanner input, Posts_User postsUser){
+    private void thirdLevel(Scanner input, ProfileUser profileUser, IMenuTemplate menu, IServiceManagerProfileUser managerProfileUser, IServiceManagerDegree managerDegree){
         boolean running = true;
         while (running){
-            menuAdminUser();
+            menu.showMenuProfile();
             System.out.print("Put your option: ");
             int inputNumberUserOption = input.nextInt();
             switch (inputNumberUserOption){
@@ -228,43 +199,29 @@ public class UI {
                     System.out.print("Put your Title Post: ");
                     String inputTitle = input.nextLine();
                     System.out.println("Put your Type of Post(Doubts,Questions,Help,Events): ");
-                    String inputTypeOfPost = input.nextLine();
+                    TypeOfPost inputTypeOfPost = TypeOfPost.valueOf(input.nextLine());
                     System.out.print("Put your description: ");
                     String inputDescription = input.nextLine();
-                    System.out.println("Put your Degree(if you are Teacher select position of Degree, Student no is necessary put 0): ");
-                    int inputPositionDegree = input.nextInt();
-                    postsUser.createNewPost(inputTitle,inputTypeOfPost,inputDescription,inputPositionDegree);
+                    managerProfileUser.addNewPost(profileUser, new Post(inputTitle, profileUser.getUser(),inputTypeOfPost, inputDescription, LocalDate.now(), searchDegree(input,managerDegree)));
                     break;
                 case 2:
                     input.nextLine();
                     System.out.println("==============Shows your Posts===============");
-                    postsUser.showPosts();
+                    managerProfileUser.readPosts(profileUser);
                     break;
                 case 3:
                     input.nextLine();
                     System.out.println("==============Update your Post===============");
-                    System.out.print("Put id of your Post:");
+                    System.out.print("Put your id Post: ");
                     int inputIdPost = input.nextInt();
-                    try {
-                        System.out.println(postsUser.searchPostUser(inputIdPost));
-                    } catch (Exception e){
-                        System.out.println(e.getMessage());
-                        break;
-                    }
-                    input.nextLine();
-                    System.out.print("Put new Title: ");
-                    String inputNewTitle = input.nextLine();
-                    System.out.print("Put new Description: ");
-                    String inputNewDescription = input.nextLine();
-                    postsUser.updatePosts(inputIdPost,inputNewTitle,inputNewDescription);
+                    managerProfileUser.updatePost(profileUser,managerProfileUser.readPost(profileUser,inputIdPost));
                     break;
                 case 4:
                     input.nextLine();
                     System.out.println("=============Delete your Post=================");
                     System.out.print("Put id of your Post:");
                     int inputIdPostDelete = input.nextInt();
-                    postsUser.deletePost(inputIdPostDelete);
-                    break;
+                    managerProfileUser.deletePost(profileUser, inputIdPostDelete);
                 case 5:
                     System.out.println("back....");
                     running = false;
@@ -273,37 +230,7 @@ public class UI {
                     System.out.println("Do write correct option!");
             }
         }
-
-
     }
-
-    public void mainLevel(Scanner input,Auth auth, Forum forum){
-        boolean running= true;
-        while (running){
-            menuMain();
-            System.out.print("Put your option: ");
-            int inputNumberUser = input.nextInt();
-            switch (inputNumberUser) {
-                case 1:
-                    handleException(()->newRegister(input,auth));
-                    break;
-                case 2:
-                    handleException(()->secondLevel(input,forum,newLogin(input,auth)));
-                    break;
-                case 3:
-                    handleException(()->secondLevel(input,forum,newLoginAnonymous(auth)));
-                    break;
-                case 4:
-                    System.out.println("==================Leave=================");
-                    running = false;
-                    break;
-                default:
-                    System.out.println("Error, Do put a correct number!");
-            }
-        }
-    }
-
-
 
     private void handleException(Runnable action) {
         try {

@@ -1,55 +1,35 @@
 package models.user;
 
-public class User {
-    protected int id_user;
-    protected String dni;
-    protected String name;
-    protected String email;
-    protected int phoneNumber;
-    protected String password;
+import java.util.Objects;
+
+public abstract class User {
+    private final int userId;
+    private final String dni;
+    private final String name;
+    private String email;
+    private String phoneNumber;
+    private String password;
     private static int counterUser = 0;
 
-
-    public User(String dni, String name, String email, int phoneNumber, String password) {
-        id_user = counterUser++;
+    protected User(String dni, String name, String email, String phoneNumber, String password) {
         this.dni = dni;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
+        userId = counterUser++;
     }
 
-    public User(){
-        id_user = counterUser++;
-        this.dni = "empty";
-        this.name = "unknow";
-        this.email = "unknow";
-        this.phoneNumber = 0;
-        this.password = null;
-    }
-
-    public int getId_user() {
-        return id_user;
-    }
-
-    public void setId_user(int id_user) {
-        this.id_user = id_user;
+    public int getUserId() {
+        return userId;
     }
 
     public String getDni() {
         return dni;
     }
 
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getEmail() {
@@ -60,11 +40,11 @@ public class User {
         this.email = email;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -76,14 +56,22 @@ public class User {
         this.password = password;
     }
 
-    public String getRole(){
-        return "User";
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return userId == user.userId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(userId);
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id_user=" + id_user +
+                "userId=" + userId +
                 ", dni='" + dni + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +

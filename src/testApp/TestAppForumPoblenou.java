@@ -1,76 +1,74 @@
 package testApp;
 
-import models.degree.Degree;
+
+import controller.serviceauthorization.ManagerAuth;
+import controller.servicedegree.ManagerDegree;
+import controller.serviceforum.ManagerForum;
+import controller.serviceprofileuser.ManagerProfileUser;
+import controller.serviceprofileuser.TypeOfPost;
+import controller.servicesubject.ManagerSubject;
 import models.auth.Auth;
+import models.degree.Degree;
+import models.degree.Subject;
 import models.forum.Forum;
-import models.forum.Posts_User;
+import models.forum.Post;
 import models.user.Student;
 import models.user.Teacher;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import view.UI;
+import view.menu.MenuManagerView;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class TestAppForumPoblenou {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        MenuManagerView menu = new MenuManagerView();
 
+        // Create Subjects
+        ManagerSubject managerSubject = new ManagerSubject();
+        managerSubject.addSubject(new Subject("Programming","POO I"));
+        managerSubject.addSubject(new Subject("DataBases", "DML I"));
+        managerSubject.addSubject(new Subject("English", "B1"));
+        managerSubject.addSubject(new Subject("History Security", "Beginner"));
 
-//         Create some Users
+        ManagerDegree managerDegree = new ManagerDegree();
+        managerDegree.addDegree(new Degree("DAM","Across Platform App"));
+        managerDegree.addDegree(new Degree("ASIX","Cybersecurity"));
 
-        // Student
-        Student student1 = new Student("99999999X", "Steven", "nystepro1@gmail.com",999999999,"12345678", new Degree("DAM"));
-        Student student2 = new Student("99999990X", "Manolito", "nystepro2@gmail.com",999999999,"12345678", new Degree("ASIX"));
-        Student student3 = new Student("99999991X", "Vegeta777", "nystepro3@gmail.com",999999999,"12345678", new Degree("SMIX"));
-        // Teacher
-        Teacher teacher = new Teacher("99999993X", "Levi", "levi@gmail.com", 999999999, "12345678",new Degree("ASIX"));
+        managerDegree.getDegree(0).getSubjects().add(managerSubject.getSubject(0));
+        managerDegree.getDegree(0).getSubjects().add(managerSubject.getSubject(1));
+
+        managerDegree.getDegree(1).getSubjects().add(managerSubject.getSubject(2));
+        managerDegree.getDegree(1).getSubjects().add(managerSubject.getSubject(3));
+
+        managerDegree.printDegrees();
 
         Auth auth = new Auth();
-
-        // Generate Some posts for Student
-        Posts_User postsUserStudent =new Posts_User(student1);
-        postsUserStudent.createNewPost("I need Infomation of DAM","Doubts", "I have a lot of doubts",0);
-        postsUserStudent.createNewPost("I have QUESTION!","Questions", "I have a questions",0);
-        postsUserStudent.createNewPost("I need a TEAM","Events", "I need a events",0);
-
-        Posts_User postsUserStudent2 =new Posts_User(student2);
-        postsUserStudent2.createNewPost("I need Infomation of DAM student2","Doubts", "I have a lot of doubts",0);
-        postsUserStudent2.createNewPost("I have QUESTION! student2","Questions", "I have a questions",0);
-        postsUserStudent2.createNewPost("I need a TEAM student2","Events", "I need a events",0);
-
-        Posts_User postsUserStudent3 =new Posts_User(student3);
-        postsUserStudent3.createNewPost("I need Infomation of DAM student3","Doubts", "I have a lot of doubts",0);
-        postsUserStudent3.createNewPost("I have QUESTION! student3","Questions", "I have a questions",0);
-        postsUserStudent3.createNewPost("I need a TEAM student3","Events", "I need a events",0);
-
-
-        // Generate some Posts for Teacher
-        Posts_User postsUserTeacher = new Posts_User(teacher);
-        postsUserTeacher.createNewPost("Need students for a project","Events", "Need students of DAM or ASIX, for a project",0);
-        postsUserTeacher.createNewPost("Second call for project","Events", "Need students of DAM or ASIX, for a project",0);
-        postsUserTeacher.createNewPost("Need a Frontend Developer","Events", "Need students of DAM or ASIX, for a project",0);
-
-        auth.register(student1);
-        auth.register(teacher);
-        auth.register(student2);
-        auth.register(student3);
-
         Forum forum = new Forum();
+
+        ManagerForum managerForum  = new ManagerForum(forum);
+
+        ManagerAuth managerAuth = new ManagerAuth(auth);
+        managerAuth.register(new Student("54910978L","Steven","nystepro@gmail.com","99999999", "123456789",managerDegree.getDegree(0)), managerForum);
+        managerAuth.register(new Teacher("32923823X","Levi","levi@gmail.com","99999919", "123456789"), managerForum);
+
+        managerAuth.usersRegistered();
+
+
+        ManagerProfileUser managerProfileUser = new ManagerProfileUser();
+        managerProfileUser.addNewPost( managerForum.getProfileUser(0), new Post("Need a Team For Football",managerForum.getProfileUser(0).getUser(), TypeOfPost.QUESTION, "Need somebody For a Team", LocalDate.now(), managerDegree.getDegree(0)));
+        managerProfileUser.addNewPost( managerForum.getProfileUser(0), new Post("I Have a Doubt", managerForum.getProfileUser(0).getUser(), TypeOfPost.DOUBT, "Somebody About Programming?", LocalDate.now(), managerDegree.getDegree(0)));
+        managerProfileUser.addNewPost( managerForum.getProfileUser(0), new Post("I've Resolved Exercise I of BBDD", managerForum.getProfileUser(0).getUser(), TypeOfPost.ANSWER, "Explain exercise*", LocalDate.now(), managerDegree.getDegree(0)));
+
+        managerProfileUser.addNewPost( managerForum.getProfileUser(1), new Post("Somebody want get 1 extra point?",managerForum.getProfileUser(1).getUser(), TypeOfPost.QUESTION, "Need somebody For math", LocalDate.now(), managerDegree.getDegree(1)));
+        managerProfileUser.addNewPost( managerForum.getProfileUser(1), new Post("I need help to my Laptop", managerForum.getProfileUser(1).getUser(), TypeOfPost.QUESTION, "My laptop is Crashing", LocalDate.now(), managerDegree.getDegree(1)));
+        managerProfileUser.addNewPost( managerForum.getProfileUser(1), new Post("I've Resolved my proble with my Laptop", managerForum.getProfileUser(1).getUser(), TypeOfPost.ANSWER, "Fix my problem*", LocalDate.now(), managerDegree.getDegree(0)));
+
+        managerForum.showForum();
+
         UI ui = new UI();
+        ui.mainLevel(input, menu, managerAuth, managerForum, managerDegree, managerProfileUser);
 
-        forum.getPostsUsers().add(postsUserStudent);
-        forum.getPostsUsers().add(postsUserStudent2);
-        forum.getPostsUsers().add(postsUserStudent3);
-        forum.getPostsUsers().add(postsUserTeacher);
-
-        Scanner input = new Scanner(System.in);
-
-        ui.mainLevel(input,auth,forum);
     }
-
-
-
 }
