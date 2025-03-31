@@ -52,7 +52,7 @@ public class ManagerForum implements IServiceForum{
     public void showForum() {
         forum.getProfileUsers().forEach(
                 profileUser ->  {
-                    profileUser.getPosts().forEach(
+                    profileUser.getPosts().values().forEach(
                             System.out::println
                     );
                 }
@@ -63,7 +63,7 @@ public class ManagerForum implements IServiceForum{
     public void showPostsByDegree(String degree) {
         forum.getProfileUsers().forEach(
                 profileUser -> {
-                    profileUser.getPosts().forEach(
+                    profileUser.getPosts().values().forEach(
                             post -> {
                                 if (post.getDegree().getNameDegree().equals(degree)){
                                     System.out.println(post);
@@ -78,7 +78,7 @@ public class ManagerForum implements IServiceForum{
     public void showPostsBySubject(String subject) {
         forum.getProfileUsers().forEach(
                 profileUser -> {
-                    profileUser.getPosts().forEach(
+                    profileUser.getPosts().values().forEach(
                             post -> {
                                 post.getDegree().getSubjects().forEach(
                                   sub -> {
@@ -98,7 +98,7 @@ public class ManagerForum implements IServiceForum{
         forum.getProfileUsers().forEach(
                 profileUser -> {
                     if (profileUser.getUser().getClass().getSimpleName().equals(user)){
-                        profileUser.getPosts().forEach(
+                        profileUser.getPosts().values().forEach(
                                 System.out::println
                         );
                     }
@@ -117,7 +117,7 @@ public class ManagerForum implements IServiceForum{
             System.out.println("\nSearch: \n");
             forum.getProfileUsers().forEach(
                     profileUser -> {
-                        profileUser.getPosts().forEach(
+                        profileUser.getPosts().values().forEach(
                                 post -> {
                                     if (post.getTitle().toLowerCase().replace(" ", "").contains(inputTitlePost.toLowerCase().replace(" ", ""))){
                                         System.out.println(post);
