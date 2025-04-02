@@ -4,37 +4,36 @@
 
 ### Introduction
 
-- Here a model like I thought when began:
+- Here new Model integrate Solid
 
-![project_forum](Model.png).
+[Draw.io_File](https://drive.google.com/file/d/1-AT6xwGhqsWVMz3mc6V-7cpVzjJlpilz/view?usp=sharing)
 
 ### Entity 
-- Here focus entity that appears: 
+- Here main entity that appears: 
   - **User**
     - **Student**
     - **Teacher**
   - **Forum**
     - **Post**
-    - **Posts_User**
+    - **ProfileUser**
   - **Degree**
     - **Subject**
 
 ### Features 
 
-| Feature      | Description                                              | Status    |
-|--------------|----------------------------------------------------------|-----------|
-| Auth         | Can do (Register,Login and Login without Register)       | completed |
-| Main Menu    | Can do Functionalities to Auth                           | Completed |
-| Second Level | Can do Functionalities to forum(anonymous or registered) | Completed |
-| Third Level  | Can do Functionalities to Profile(just registered)       | Completed |
+| Feature       | Description                                              | Status    |
+|---------------|----------------------------------------------------------|-----------|
+| Auth          | Can do (Register,Login and Login without Register)       | completed |
+| Main Menu     | Can do Functionalities to Auth                           | Completed |
+| Forum Level   | Can do Functionalities to forum(anonymous or registered) | Completed |
+| Profile Level | Can do Functionalities to Profile(just registered)       | Completed |
 
 ### Auth
-
 - Method add new User
 - Method Login User
 - Method Anonymous User
 
-### Second Level 
+### Forum Level 
 - Method All Posts
 - Method Show Post for Degree 
 - Method Show Post for Subject
@@ -42,13 +41,21 @@
 - Method Show Post Student or Teacher
 - Method Search Post
 
-## Third Level
+## Profile Level
 - Method create new Post
 - Method Read your Posts
 - Method Update your Posts
 - Method Delete your Posts
 
+## Services (new)
+
+- ManagerAuth
+- ManagerDegree
+- ManagerForum
+- ManagerProfileUser
+- ManagerSubject
+
 
 ### Document about more explain 
 
-[Document_about_Project](https://docs.google.com/document/d/19eTjgKEy29OtXhbo-SbTRn8K1jmmi6GtFTvif7uGcL8/edit?usp=sharing)
+[Document_about_Project](https://docs.google.com/document/d/1J5aWFuX1T57l2pnSH0d3dHrZNUiznWKN0zpd8AiXHUI/edit?usp=sharing)

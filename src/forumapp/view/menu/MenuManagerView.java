@@ -2,7 +2,7 @@ package forumapp.view.menu;
 
 import forumapp.models.user.User;
 
-public class MenuManagerView implements IMenuTemplate {
+public class    MenuManagerView implements IMenuTemplate {
     @Override
     public void showMenuMain() {
         System.out.println("""
