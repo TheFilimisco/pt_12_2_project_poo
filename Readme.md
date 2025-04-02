@@ -59,3 +59,7 @@
 ### Document about more explain 
 
 [Document_about_Project](https://docs.google.com/document/d/1J5aWFuX1T57l2pnSH0d3dHrZNUiznWKN0zpd8AiXHUI/edit?usp=sharing)
+
+### Explain about Test
+- Test with Junit
+- Test into project (Recommendation you can see like handle all)
