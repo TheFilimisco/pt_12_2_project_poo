@@ -3,7 +3,7 @@ package forumapp.models.user;
 import forumapp.models.degree.Degree;
 import java.util.HashSet;
 
-public class Teacher extends User{
+public class Teacher  extends User{
     private final HashSet<Degree> degreesAssigned;
 
     public Teacher(String dni, String name, String email, String phoneNumber, String password) {
